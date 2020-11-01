@@ -25,9 +25,14 @@ const name = document.querySelector("input");
 const idhighScore = document.querySelectorAll(".idhighScore");
 const moneyid = document.querySelectorAll(".moneyid");
 const donvi = document.querySelectorAll(".donvi");
-  startMusic.play();
-
-let arrayUser = [{id: "NoName", money: "0", donvi: "$"}]
+startMusic.play();
+let arrayUser = [{ id: "NoName", money: "0", donvi: "$" }];
+if (JSON.parse(localStorage.getItem("array"))) {
+  arrayUser = JSON.parse(localStorage.getItem("array"));
+}
+arrayUser = arrayUser.sort(function (a, b) {
+  return b.money - a.money;
+});
 let countDown = 60;
 let timeout = 0;
 function display() {
@@ -70,12 +75,7 @@ function idHighScore() {
 highScore.addEventListener("click", function () {
   highScoreDisplay.style.display = "block";
   startGame.style.display = "none";
-  if(JSON.parse(localStorage.getItem("array"))){
-   arrayUser=JSON.parse(localStorage.getItem("array"))
-    }
-    arrayUser = arrayUser.sort(function (a, b) {
-      return b.money - a.money;
-    });
+
   idHighScore();
 });
 btnStart.addEventListener("click", function () {
@@ -201,8 +201,8 @@ let arrayQues = [
     {
       question:
         "Có 2 người cha và 2 người con cùng chia đều số tiền là 27 nghìn. Hỏi mỗi người được bao nhiều?",
-        answerResult: ["6,75", " 7", "7,5", "9"],
-        correct: 3,
+      answerResult: ["6,75", " 7", "7,5", "9"],
+      correct: 3,
     },
   ],
   [
@@ -459,7 +459,7 @@ answer.forEach((e, index) => {
   });
 });
 let arrayHelp = [];
-let number1=0
+let number1 = 0;
 helpBy5050.addEventListener("click", function Remove5050() {
   number1 = number;
   let arrayRomove = [];
@@ -471,11 +471,11 @@ helpBy5050.addEventListener("click", function Remove5050() {
   }
   let valueRandom1 = arrayRomove[Math.floor(Math.random() * 3)];
   for (let i = 0; i < 4; i++) {
-    if (i != valueRandom1 && i!=arrayQues[number][randomQue].correct) {
+    if (i != valueRandom1 && i != arrayQues[number][randomQue].correct) {
       arrayRomove1.push(i);
     }
   }
-  let valueRandom2 = arrayRomove1[Math.floor(Math.random() * 2)];  
+  let valueRandom2 = arrayRomove1[Math.floor(Math.random() * 2)];
   for (let i = 0; i < 4; i++) {
     if (i != valueRandom1 && i != valueRandom2) {
       arrayHelp.push(answer[i].innerText);
@@ -488,28 +488,42 @@ helpBy5050.addEventListener("click", function Remove5050() {
   helpBy5050.style.textDecoration = "line-through";
 });
 helpByLooker.addEventListener("click", function SupportByLooker() {
+  console.log(arrayHelp);
+  console.log(number1);
+  console.log(number);
+  if (arrayHelp.length>0 ){
+    console.log('true');
+  }
+  if( number1 == number)
+  {
+    console.log('true2');
+  }
   helpLookerMusic.play();
-  if (arrayHelp != [] && number1==number) {
+  if (arrayHelp.length>0 && number1 == number) {
     setTimeout(() => {
       resultSupport.innerText = `Chúng tôi nghĩ là ${arrayHelp[random(2)]}`;
       helpLookerMusic.pause();
-    }, 3000);
+      console.log(1);
+    }, 500);
   }
-  if (arrayHelp != [] && number1!=number) {
+  if (arrayHelp.length>0 && number1 != number) {
     setTimeout(() => {
       resultSupport.innerText = `Chúng tôi nghĩ là ${
         arrayQues[number][randomQue].answerResult[random(4)]
       }`;
+      console.log(2);
       helpLookerMusic.pause();
-    }, 3000);
+    }, 500);
   }
-  if (arrayHelp == []) {
+  if (arrayHelp.length==0) {
     setTimeout(() => {
       resultSupport.innerText = `Chúng tôi nghĩ là ${
         arrayQues[number][randomQue].answerResult[random(4)]
       }`;
+      console.log(3);
+
       helpLookerMusic.pause();
-    }, 3000);
+    }, 500);
   }
   helpByLooker.disabled = true;
   helpByLooker.style.textDecoration = "line-through";
